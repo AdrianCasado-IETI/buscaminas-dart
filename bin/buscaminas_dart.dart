@@ -34,13 +34,16 @@ void main(List<String> arguments) {
 		String? input = stdin.readLineSync();
 
 		if(input != null) {
-			if(input == "flag"){
+			if(input.toLowerCase() == "flag") {
 				puttingFlags = true;
 			}
-			else if(input == "play"){
+			else if(input.toLowerCase() == "play") {
 				puttingFlags = false;
 			}
-			else {
+			else if(input.toLowerCase() == "cheat") {
+				printCheatBoard();
+			}
+			else if(input.toLowerCase().length == 2 && numLetter.contains(input[0].toUpperCase())){
 				if(puttingFlags) {
 					putFlag(input);
 				}else{
@@ -74,18 +77,67 @@ void printBoard() {
 	print("  +---+---+---+---+---+---+---+---+---+---+");
 }
 
+void printCheatBoard() {
+	print("\n    0   1   2   3   4   5   6   7   8   9 ");
+	for(int i = 0; i < board.length; i++) {
+		print("  +---+---+---+---+---+---+---+---+---+---+");
+		stdout.write("${numLetter[i]} ");
+		for(int j = 0; j < board[i].length; j++) {
+			if(board[i][j]==-2) {
+				stdout.write("| B ");
+			}else {
+				stdout.write("| · ");
+			}
+		}
+		print("|");
+	} 
+	print("  +---+---+---+---+---+---+---+---+---+---+");
+}
+
 
 void putBombs() {
 	int numBombs = 8;
 	var random = Random();
+
+	int firstQuadr = 0;
+	int secondQuadr = 0;
+	int thirdQuadr = 0;
+	int forthQuadr = 0;
 
 	while(numBombs > 0) {
 		int row = random.nextInt(6);
 		int col = random.nextInt(10);
 
 		if(board[row][col] == -1) {
-			board[row][col] = -2;
-			numBombs--;
+			if(row < 3 && col < 5) {
+				if(firstQuadr < 2) {
+					board[row][col] = -2;
+					numBombs--;
+					firstQuadr++;
+				}
+			}
+			else if(row < 3) {
+				if(secondQuadr < 2) {
+					board[row][col] = -2;
+					numBombs--;
+					secondQuadr++;
+				}
+			}
+			else if(col < 5) {
+				if(thirdQuadr < 2) {
+					board[row][col] = -2;
+					numBombs--;
+					thirdQuadr++;
+				}
+			}
+			else {
+				if(forthQuadr < 2) {
+					board[row][col] = -2;
+					numBombs--;
+					forthQuadr ++;
+				}
+			}
+			
 		}
 	}
 }
@@ -94,9 +146,9 @@ void play(String value) {
 
 	int col = int.parse(value[1]);
 
-	String rowStr = value[0];
+	String rowStr = value[0].toUpperCase();
 	int row = -1;
-	switch(rowStr.toUpperCase()){
+	switch(rowStr){
 		case "A":
 			row = 0;
 		case "B":
