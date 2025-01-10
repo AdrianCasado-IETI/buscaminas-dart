@@ -169,6 +169,7 @@ void play(String value) {
 	}
 
 	checkPos(row,col);
+	checkVictory();
 
 }
 
@@ -288,6 +289,28 @@ void putFlag(String value) {
 	else if(board[row][col] == -1 || board[row][col] == -2) {
 		flags.add("$row,$col");
 	}
+
+	checkVictory();
 	
 
+}
+
+void checkVictory() {
+
+	var count = 0;
+
+	for(int i = 0; i < board.length; i++) {
+		for (int j = 0; j < board[i].length; j++) {
+			if(board[i][j] == -2) {
+				if(flags.contains("$i,$j")) {
+					count ++;
+				}
+			}
+		}
+	}
+
+	if(count == 8 && flags.length == 8) {
+		print("Has guanyat!");
+		isFinished = true;
+	}
 }
